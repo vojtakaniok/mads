@@ -79,6 +79,8 @@ RUN cd ns-allinone-$NS3_VERSION/ns-$NS3_VERSION && \
 
 RUN ln -s /usr/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION /usr/ns3
 
+RUN pip install --user ns3
+
 # final cleanup
 RUN apt clean && \
 	rm -rf /var/lib/apt/lists/* && \
