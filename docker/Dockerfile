@@ -59,6 +59,7 @@ RUN apt update && \
   uml-utilities \
   libboost-all-dev \
   mc \
+  curl \
   wget
 
 # create user student and set password
@@ -78,10 +79,31 @@ RUN cd ns-allinone-$NS3_VERSION/ns-$NS3_VERSION && \
 	./ns3 configure --build-profile=debug --disable-werror --enable-examples --enable-tests 
 
 RUN ln -s /usr/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION /usr/ns3
+# RUN ln -s /usr/local/bin/ns3 /usr/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION/ns3
 
 RUN pip install --user ns3
+
+# add neovim
+WORKDIR /usr/src
+RUN wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz && \
+  tar -xvf nvim-linux64.tar.gz
+
+
+RUN ln -s /usr/src/nvim-linux64/bin/nvim /usr/local/bin/nvim
+
+# RUN git clone https://github.com/LazyVim/starter ~/.config/nvim
+RUN git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
+# RUN nvim --headless +LazyInstall +qall
+
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+
+RUN apt update && apt install -y nodejs
 
 # final cleanup
 RUN apt clean && \
 	rm -rf /var/lib/apt/lists/* && \
-	rm ns-allinone-$NS3_VERSION.tar.bz2
+	rm /usr/ns-allinone-$NS3_VERSION.tar.bz2 && \
+  rm /usr/src/nvim-linux64.tar.gz
+  
