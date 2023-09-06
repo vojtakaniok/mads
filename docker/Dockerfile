@@ -4,6 +4,8 @@ LABEL description = "Docker image of ns3 running on Ubuntu 22.04"
 LABEL author = "jan@rozhon.eu"
 
 ARG NS3_VERSION="3.39"
+ARG INSTALL_DIR="/home/student"
+ARG NS3_LINK_DIR="/home/student/_ns3"
 
 # install dependencies based on https://www.nsnam.org/wiki/Installation
 RUN apt update && \
@@ -23,6 +25,7 @@ RUN apt update && \
   gir1.2-gtk-3.0 \
   ipython3 \
   python3-setuptools \
+  python3-venv \
   pkg-config \
   sqlite \
   sqlite3 \
@@ -60,29 +63,45 @@ RUN apt update && \
   libboost-all-dev \
   mc \
   curl \
+  sudo \
+  xpra \ 
   wget
 
 # create user student and set password
 RUN groupadd -r student && \
-	useradd -m -d /home/student -g student student
+	useradd -m -d $INSTALL_DIR -g student student && \
+  usermod -aG sudo student
 
 RUN echo "student:student" | chpasswd
+RUN echo "root:root" | chpasswd
 
+USER student
 #RUN mkdir -p /usr/ns3
-WORKDIR /usr
+WORKDIR $INSTALL_DIR
 
 RUN wget https://www.nsnam.org/releases/ns-allinone-$NS3_VERSION.tar.bz2 && tar -jxvf ns-allinone-$NS3_VERSION.tar.bz2
 
-RUN chown -fR student:student ns-allinone-$NS3_VERSION/
+# RUN chown -fR student:student ns-allinone-$NS3_VERSION/
 
-RUN cd ns-allinone-$NS3_VERSION/ns-$NS3_VERSION && \
-	./ns3 configure --build-profile=debug --disable-werror --enable-examples --enable-tests 
+WORKDIR $INSTALL_DIR/ns-allinone-$NS3_VERSION
+RUN ./build.py --enable-examples --enable-tests
 
-RUN ln -s /usr/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION /usr/ns3
+RUN ln -s $INSTALL_DIR/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION $NS3_LINK_DIR
 # RUN ln -s /usr/local/bin/ns3 /usr/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION/ns3
 
-RUN pip install --user ns3
+# USER student
 
+WORKDIR $INSTALL_DIR
+ENV VIRTUAL_ENV=$INSTALL_DIR/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN pip install ns3 loguru
+
+RUN echo "export PATH=$PATH:$INSTALL_DIR/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION" >> /home/student/.bashrc
+
+RUN git clone https://github.com/NvChad/NvChad $INSTALL_DIR/.config/nvim --depth 1
+
+USER root
 # add neovim
 WORKDIR /usr/src
 RUN wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz && \
@@ -90,20 +109,23 @@ RUN wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.
 
 
 RUN ln -s /usr/src/nvim-linux64/bin/nvim /usr/local/bin/nvim
-
-# RUN git clone https://github.com/LazyVim/starter ~/.config/nvim
-RUN git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
-# RUN nvim --headless +LazyInstall +qall
-
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 
 RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
 
 RUN apt update && apt install -y nodejs
 
+
+# RUN git clone https://github.com/LazyVim/starter ~/.config/nvim
+# RUN nvim --headless +LazyInstall +qall
+
+
 # final cleanup
 RUN apt clean && \
 	rm -rf /var/lib/apt/lists/* && \
-	rm /usr/ns-allinone-$NS3_VERSION.tar.bz2 && \
+	rm $INSTALL_DIR/ns-allinone-$NS3_VERSION.tar.bz2 && \
   rm /usr/src/nvim-linux64.tar.gz
   
+USER student
+WORKDIR $INSTALL_DIR
+CMD ["/bin/bash"]
