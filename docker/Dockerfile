@@ -65,6 +65,7 @@ RUN apt update && \
   curl \
   sudo \
   xpra \ 
+  iproute2 \
   wget
 
 # create user student and set password
@@ -95,7 +96,7 @@ WORKDIR $INSTALL_DIR
 ENV VIRTUAL_ENV=$INSTALL_DIR/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-RUN pip install ns3 loguru
+RUN pip install ns3 loguru jupyterlab
 
 RUN echo "export PATH=$PATH:$INSTALL_DIR/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION" >> /home/student/.bashrc
 

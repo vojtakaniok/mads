@@ -1,4 +1,6 @@
+import ctypes
 import random
+from typing import Optional
 
 from ns import ns
 
@@ -34,6 +36,31 @@ ns.cppyy.cppdef(
 # Let's fetch the IP address of the last node, which is on Ipv4Interface 1
 
 
+def print_routing_table(node):
+    ipv4 = node.GetObject[ns.Ipv4]()
+    if ipv4:
+        list_routing = ipv4.GetRoutingProtocol().GetObject[ns.Ipv4ListRouting]()
+
+        # Iterate through each routing protocol in the list
+        for i in range(list_routing.GetNRoutingProtocols()):
+            priority = ctypes.c_int16()
+            routing_protocol = list_routing.GetRoutingProtocol(i, priority)
+
+            # Check if the routing protocol provides a GetNRoutes function
+            # This is true for Ipv4StaticRouting, but may vary for other protocols
+            if hasattr(routing_protocol, "GetNRoutes"):
+                num_routes = routing_protocol.GetNRoutes()
+
+                for j in range(num_routes):
+                    route = routing_protocol.GetRoute(j)
+                    dest = route.GetDest()
+                    gateway = route.GetGateway()
+                    interface = route.GetInterface()
+                    print(
+                        f"Destination: {dest}, Gateway: {gateway}, Interface: {interface}"
+                    )
+
+
 def generate_positions():
     positions = ns.CreateObject("ListPositionAllocator")
     for layer, node_count in enumerate(NODES):
@@ -43,8 +70,33 @@ def generate_positions():
     return positions
 
 
+def get_node_ip_from_idx(
+    devices: dict,
+    connection_layer: int,
+    left_idx: Optional[int] = None,
+    right_idx: Optional[int] = None,
+) -> ns.cppyy.gbl.ns3.Ipv4Address:
+    devs_in_layer = devices[connection_layer]
+    if connection_layer == 0:  # inputs
+        assert left_idx is not None
+        dev = list(filter(lambda d: d["l"] == left_idx, devs_in_layer))
+        assert len(dev) == 1
+        ip = dev[0]["ip_addresses"][0]
+    elif connection_layer == len(NODES) - 2:  # outputs
+        assert right_idx is not None
+        dev = list(filter(lambda d: d["r"] == right_idx, devs_in_layer))
+        assert len(dev) == 1
+        ip = dev[0]["ip_addresses"][1]
+    else:
+        return
+
+    return ip
+
+
 def main():
     # Create nodes for each stage
+    # ns.core.LogComponentEnable("OnOffApplication", ns.core.LOG_LEVEL_INFO)
+    ns.core.LogComponentEnable("PacketSink", ns.core.LOG_LEVEL_INFO)
     node_containers = [ns.network.NodeContainer() for _ in NODES]
     x = 10.0
     for num, c in zip(NODES, node_containers):
@@ -66,7 +118,7 @@ def main():
                 switch_idx = node_idx // NODES[1]
                 devices[connection_layer].append(
                     {
-                        "layer": connection_layer,
+                        "connection_layer": connection_layer,
                         "l": node_idx,
                         "r": switch_idx,
                         "devices": p2p.Install(
@@ -82,7 +134,7 @@ def main():
                 switch_idx = node_idx // NODES[-2]
                 devices[connection_layer].append(
                     {
-                        "layer": connection_layer,
+                        "connection_layer": connection_layer,
                         "l": switch_idx,
                         "r": node_idx,
                         "devices": p2p.Install(
@@ -97,7 +149,7 @@ def main():
                 for j in range(NODES[connection_layer + 1]):  # right side
                     devices[connection_layer].append(
                         {
-                            "layer": connection_layer,
+                            "connection_layer": connection_layer,
                             "l": i,
                             "r": j,
                             "devices": p2p.Install(
@@ -120,76 +172,71 @@ def main():
                 ns.network.Ipv4Address(base_ip), ns.network.Ipv4Mask("255.255.255.0")
             )
             address_container = address.Assign(dev["devices"])
-            print(address_container.GetAddress(0))
-            print(address_container.GetAddress(1))
+            # store ip addresses for future use
+            dev["ip_addresses"] = (
+                address_container.GetAddress(0),
+                address_container.GetAddress(1),
+            )
+
+    ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 
     # Set up traffic
     source_apps = ns.network.ApplicationContainer()
     dest_apps = ns.network.ApplicationContainer()
 
     # for i in range(num_switches_per_stage):
-    onoff_helper = ns.applications.OnOffHelper(
-        "ns3::UdpSocketFactory", ns.network.Address()
-    )
-    onoff_helper.SetAttribute(
-        "OnTime", ns.core.StringValue("ns3::ConstantRandomVariable[Constant=1]")
-    )
-    onoff_helper.SetAttribute(
-        "OffTime", ns.core.StringValue("ns3::ConstantRandomVariable[Constant=0]")
-    )
 
+    source_nodes_idxs = list(range(NODES[0]))
+    dest_nodes_idxs = list(range(NODES[-1]))
     for i in range(NODES[0]):
-        source_nodes_idxs = list(range(NODES[0]))
-        dest_nodes_idxs = list(range(NODES[-1]))
         source_node_idx = random.choice(source_nodes_idxs)
         dest_node_idx = random.choice(dest_nodes_idxs)
         source_nodes_idxs.remove(source_node_idx)
         dest_nodes_idxs.remove(dest_node_idx)
 
         source_node = node_containers[0].Get(source_node_idx)
-        # print(source_node.GetObject(ns.Ipv4.GetTypeId()))
-        address.GetAddress(source_node)
+        dest_node = node_containers[-1].Get(dest_node_idx)
 
-        a = ns.cppyy.gbl.getIpv4AddressFromNode(source_node)
-        # ipv4_obj = source_node.GetObject(ns.Ipv4.GetTypeId())
-        # address = ipv4_obj.GetAddress(1, 0).GetLocal()
-        d = source_node.GetDevice(0)
-        i = ns.Ipv4.GetInterfaceForDevice(d)
-        a = ns.Ipv4.GetAddress(i)
-        print(a)
+        source_addr = get_node_ip_from_idx(devices, 0, source_node_idx)
+        dest_addr = get_node_ip_from_idx(
+            devices, len(NODES) - 2, right_idx=dest_node_idx
+        )
+        print(source_addr, dest_addr)
+
+        # a = ns.cppyy.gbl.getIpv4AddressFromNode(source_node)
+
+        #
+        # onoff_helper.SetAttribute("Remote", dest_addr)
+        port = 9
+        source_socket = ns.network.InetSocketAddress(source_addr, port)
+        onoff_helper = ns.applications.OnOffHelper(
+            "ns3::UdpSocketFactory", source_socket.ConvertTo()
+        )
+        onoff_helper.SetAttribute(
+            "OnTime", ns.core.StringValue("ns3::ConstantRandomVariable[Constant=1]")
+        )
+        onoff_helper.SetAttribute(
+            "OffTime", ns.core.StringValue("ns3::ConstantRandomVariable[Constant=0]")
+        )
+        source_apps.Add(onoff_helper.Install(source_node))
+
+        destination_socket = ns.network.InetSocketAddress(dest_addr, port)
+        #  Create a packet sink to receive these packets
+        sink = ns.applications.PacketSinkHelper(
+            "ns3::UdpSocketFactory",
+            destination_socket.ConvertTo(),
+        )
+        dest_apps.Add(sink.Install(dest_node))
+        if i == 0:
+            p2p.EnablePcapAll("/opt/brum")
 
     #
-    #     # remote_addr = ns.network.InetSocketAddress(output_stage.Get(i).GetObject(ns.internet.Ipv4.GetTypeId()).GetAddress(1,0).GetLocal(), 9)
-    #     # ipv4_obj = ns.internet.Ipv4AddressHelper.GetIpv4(output_stage.Get(i))
-    #     # ipv4_obj = output_stage.Get(i).GetObject(ns.internet.Ipv4.GetTypeId())
-    #     # ipv4_obj = output_stage.Get(i).GetObject(ns.internet.Ipv4.GetTypeId()).GetObject(ns.internet.Ipv4)
-    #     ipv4_obj = output_stage.Get(i).GetObject(ns.internet.Ipv4.GetTypeId())
-    #     remote_addr = ns.network.InetSocketAddress(
-    #         ipv4_obj.GetAddress(1, 0).GetLocal(), 9
-    #     )
-    #
-    #     onoff_helper.SetAttribute("Remote", ns.network.AddressValue(remote_addr))
-    #
-    #     sourceApps.Add(onoff_helper.Install(input_stage.Get(i)))
-    #
-    #     # Set up packet sinks at the receivers to capture packets
-    #     packet_sink_helper = ns.applications.PacketSinkHelper(
-    #         "ns3::UdpSocketFactory", ns.network.Address(remote_addr)
-    #     )
-    #     destApps.Add(packet_sink_helper.Install(output_stage.Get(i)))
-    #
-    source_apps.Start(ns.core.Seconds(1.0))
+    source_apps.Start(ns.core.Seconds(2.0))
     source_apps.Stop(ns.core.Seconds(10.0))
     dest_apps.Start(ns.core.Seconds(1.0))
     dest_apps.Stop(ns.core.Seconds(10.0))
 
-    # Setup FlowMonitor
-    # flow_monitor_helper = ns.flow_monitor.FlowMonitorHelper()
-    # monitor = flow_monitor_helper.InstallAll()
-
-    # Set up NetAnim
-
-    # p2p.EnableAsciiAll("clos-ascii-trace.tr")
+    p2p.EnableAsciiAll("clos-ascii-trace.tr")
     print("sssss")
     animator = ns.netanim.AnimationInterface("clos-animation.xml")
     ns.core.Simulator.Run()
