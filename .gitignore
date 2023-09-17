@@ -3,6 +3,6 @@
 **/.ipynb_checkpoints/**
 **/.Trash*/**
 **/__pycache__/**
-
+**/utils.py
 
 
