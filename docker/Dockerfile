@@ -95,12 +95,13 @@ RUN ln -s $INSTALL_DIR/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION $NS3_LINK_DIR
 WORKDIR $INSTALL_DIR
 ENV VIRTUAL_ENV=$INSTALL_DIR/venv
 RUN python3 -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV PATH="$VIRTUAL_ENV/bin:$PATH:$INSTALL_DIR/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION"
 RUN pip install ns3 loguru jupyterlab
 
-RUN echo "export PATH=$PATH:$INSTALL_DIR/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION" >> /home/student/.bashrc
+# RUN echo "export PATH=$PATH:$INSTALL_DIR/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION" >> /home/student/.bashrc
 
-RUN git clone https://github.com/NvChad/NvChad $INSTALL_DIR/.config/nvim --depth 1
+# RUN git clone https://github.com/NvChad/NvChad $INSTALL_DIR/.config/nvim --depth 1
+RUN git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
 
 USER root
 # add neovim
