@@ -1,0 +1,8 @@
+.various_iterations/**
+.mypy_cache/**
+**/.ipynb_checkpoints/**
+**/.Trash*/**
+**/__pycache__/**
+
+
+
