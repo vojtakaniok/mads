@@ -7,7 +7,32 @@ from ns import ns
 # enable logging on applications
 ns.LogComponentEnable("UdpEchoClientApplication", ns.core.LOG_LEVEL_INFO)
 ns.LogComponentEnable("UdpEchoServerApplication", ns.core.LOG_LEVEL_INFO)
+ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 """
+
+
+def get_iface_from_ifacecontainer(
+    container: ns.Ipv4InterfaceContainer, if_idx: int
+) -> ns.Ipv4Interface:
+    """
+    Retrieves an interface from an Ipv4InterfaceContainer.
+
+    Parameters
+    ----------
+    container : ns.Ipv4InterfaceContainer
+        The container from which the interface is to be retrieved.
+    if_idx : int
+        The index of the interface in the container.
+
+    Returns
+    -------
+    ns.Ipv4Interface
+        The retrieved interface.
+    """
+    ipproto, idx = container.Get(if_idx)
+    ipproto = ipproto.__deref__()
+    iface = ipproto.GetInterface(idx).__deref__()
+    return iface
 
 
 def assign_ip_to_iface(
