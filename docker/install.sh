@@ -3,10 +3,6 @@ NS3_VERSION="3.39"
 INSTALL_DIR="/home/student"
 NS3_LINK_DIR="/home/student/_ns3"
 
-curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-
-echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-
 sudo apt update && \
   sudo apt install -y gcc \
   g++ \
@@ -78,10 +74,12 @@ cd $INSTALL_DIR/ns-allinone-$NS3_VERSION || exit
 ln -s $INSTALL_DIR/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION $NS3_LINK_DIR
 
 cd $INSTALL_DIR || exit
-export VIRTUAL_ENV=$INSTALL_DIR/venv
+export VIRTUAL_ENV=$INSTALL_DIR/venv-ns3
 python3 -m venv $VIRTUAL_ENV
-echo "export PATH=""$VIRTUAL_ENV/bin:$PATH:$INSTALL_DIR/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION" >> /home/student/.profile
-source /home/student/.profile
+# echo "export PATH=""$VIRTUAL_ENV/bin:$PATH:$INSTALL_DIR/ns-allinone-$NS3_VERSION/ns-$NS3_VERSION" >> /home/student/.profile
+source $VIRTUAL_ENV/bin/activate
 pip install ns3 loguru jupyterlab
+
+rm ns-allinone-$NS3_VERSION.tar.bz2
 
 
