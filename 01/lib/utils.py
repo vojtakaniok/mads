@@ -143,6 +143,22 @@ def create_echo_client_helper(
 
 
 def get_routing_table_str(node: Union[ns.Node, ns.Ptr]) -> str:
+    """
+    Retrieves the routing table for a node and returns it as a string.
+    This function uses ns-3 internal PrintRoutingTable method.
+    However, as this method only works with files, we provide it with
+    temporary name and the file is then read to memory and deleted.
+
+    Parameters
+    ----------
+    node : Union[ns.Node, ns.Ptr]
+        The node for which the routing table is to be returned.
+
+    Returns
+    -------
+    str
+        The routing table for the node.
+    """
     try:
         node = node.__deref__()
     except AttributeError as e:
