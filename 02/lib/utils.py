@@ -1,6 +1,6 @@
 import ctypes
 import os
-from typing import Union
+from typing import Optional, Union
 
 from ns import ns
 
@@ -10,6 +10,66 @@ ns.LogComponentEnable("UdpEchoClientApplication", ns.core.LOG_LEVEL_INFO)
 ns.LogComponentEnable("UdpEchoServerApplication", ns.core.LOG_LEVEL_INFO)
 ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 """
+
+##########################################################################
+# 02
+"""
+def generate_positions():
+    positions = ns.CreateObject("ListPositionAllocator")
+    for layer, node_count in enumerate(NODES):
+        for node in range(node_count):
+            positions.__deref__().Add(ns.Vector(layer * 10, node * 10, 0))
+
+    return positions
+"""
+
+def get_node_ip_from_idx(
+    devices: dict,
+    connection_layer: int,
+    left_idx: Optional[int] = None,
+    right_idx: Optional[int] = None,
+    nodes_len: int = 5,
+) -> ns.Ipv4Address:
+    """
+    Retrieves the IP address of a node from its index.
+
+    Parameters
+    ----------
+    devices : dict
+        The dictionary containing the devices. The structure is defined in Jupyter.
+    connection_layer : int
+        The layer of the connection.
+    left_idx : Optional[int], optional
+        The index of the node on the left, by default None.
+    right_idx : Optional[int], optional
+        The index of the node on the right, by default None.
+    nodes_len : int, optional
+        The length of the nodes, by default 5. This is actually a number of layers in
+        Clos network with endpoints so 5 actually means a 3-stage Clos network.
+
+    Returns
+    -------
+    ns.cppyy.gbl.ns3.Ipv4Address
+        The IP address of the node.
+    """
+    devs_in_layer = devices[connection_layer]
+    if connection_layer == 0:  # inputs
+        assert left_idx is not None
+        dev = list(filter(lambda d: d["l"] == left_idx, devs_in_layer))
+        assert len(dev) == 1
+        ip = dev[0]["ip_addresses"][0]
+    elif connection_layer == nodes_len - 2:  # outputs
+        assert right_idx is not None
+        dev = list(filter(lambda d: d["r"] == right_idx, devs_in_layer))
+        assert len(dev) == 1
+        ip = dev[0]["ip_addresses"][1]
+    else:
+        return
+
+    return ip
+
+
+##########################################################################
 
 
 def get_iface_from_ifacecontainer(
