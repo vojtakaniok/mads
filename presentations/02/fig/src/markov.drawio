@@ -1,0 +1,94 @@
+<mxfile host="app.diagrams.net" modified="2023-10-02T15:02:57.506Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0" etag="abPhA2oJXUdSpsTOI2-f" version="21.6.6">
+  <diagram name="Page-1" id="vc3jPWbZShCnOlXhxFDt">
+    <mxGraphModel dx="2164" dy="738" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-1" value="0" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;strokeColor=#00A499;shadow=1;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="-200" y="720" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-2" value="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;strokeColor=#00A499;shadow=1;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="-80" y="720" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-3" value="2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;strokeColor=#00A499;shadow=1;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="720" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-4" value="3" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;strokeColor=#00A499;shadow=1;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="200" y="720" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontColor=#666666;strokeColor=#E4002B;strokeWidth=2;startArrow=none;startFill=0;endArrow=block;endFill=1;endSize=3;startSize=3;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-130" y="720" as="sourcePoint" />
+            <mxPoint x="-70" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontColor=#666666;strokeColor=#E4002B;strokeWidth=2;startArrow=none;startFill=0;endArrow=block;endFill=1;endSize=3;startSize=3;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-10" y="720" as="sourcePoint" />
+            <mxPoint x="50" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontColor=#666666;strokeColor=#E4002B;strokeWidth=2;startArrow=none;startFill=0;endArrow=block;endFill=1;endSize=3;startSize=3;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="110" y="719.43" as="sourcePoint" />
+            <mxPoint x="170" y="719.43" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontColor=#666666;strokeColor=#0047BB;strokeWidth=2;startArrow=block;startFill=1;endArrow=none;endFill=0;endSize=3;startSize=3;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-130" y="800.5699999999999" as="sourcePoint" />
+            <mxPoint x="-70" y="800.5699999999999" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontColor=#666666;strokeColor=#0047BB;strokeWidth=2;startArrow=block;startFill=1;endArrow=none;endFill=0;endSize=3;startSize=3;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-10" y="800.5699999999999" as="sourcePoint" />
+            <mxPoint x="50" y="800.5699999999999" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontColor=#666666;strokeColor=#0047BB;strokeWidth=2;startArrow=block;startFill=1;endArrow=none;endFill=0;endSize=3;startSize=3;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="799.43" as="sourcePoint" />
+            <mxPoint x="210" y="799.43" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontColor=#666666;strokeColor=#666666;strokeWidth=2;startArrow=none;startFill=0;endArrow=none;endFill=0;endSize=3;startSize=3;dashed=1;dashPattern=1 2;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="130" y="759.7099999999999" as="sourcePoint" />
+            <mxPoint x="190" y="759.7099999999999" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontColor=#666666;strokeColor=#E4002B;strokeWidth=2;startArrow=none;startFill=0;endArrow=none;endFill=0;endSize=3;startSize=3;dashed=1;dashPattern=1 2;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="180" y="719.4299999999998" as="sourcePoint" />
+            <mxPoint x="210" y="719.4300000000001" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontColor=#666666;strokeColor=#0047BB;strokeWidth=2;startArrow=none;startFill=0;endArrow=none;endFill=0;endSize=3;startSize=3;dashed=1;dashPattern=1 2;fontSize=20;fontFamily=Lato;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DLato;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="110" y="799.9999999999998" as="sourcePoint" />
+            <mxPoint x="140" y="800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-27" value="&lt;a class=&quot;mw-selflink selflink&quot; style=&quot;font-size: 20px;&quot;&gt;λ&lt;/a&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=20;fontColor=#E4002B;" vertex="1" parent="1">
+          <mxGeometry x="-130" y="690" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-28" value="&lt;a class=&quot;mw-selflink selflink&quot; style=&quot;font-size: 20px;&quot;&gt;λ&lt;/a&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=20;fontColor=#E4002B;" vertex="1" parent="1">
+          <mxGeometry x="-10" y="690" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-29" value="&lt;a class=&quot;mw-selflink selflink&quot; style=&quot;font-size: 20px;&quot;&gt;λ&lt;/a&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=20;fontColor=#E4002B;" vertex="1" parent="1">
+          <mxGeometry x="110" y="690" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-30" value="μ" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=20;fontColor=#0047BB;" vertex="1" parent="1">
+          <mxGeometry x="-130" y="800" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-31" value="μ" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=20;fontColor=#0047BB;" vertex="1" parent="1">
+          <mxGeometry x="-10" y="800" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OUwcuTHTFBsF-hm-4LIr-32" value="μ" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=20;fontColor=#0047BB;" vertex="1" parent="1">
+          <mxGeometry x="150" y="800" width="60" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
