@@ -10,5 +10,5 @@ $ xpra start :10 --start-child=./ns-allinone-3.39/netanim-3.109/NetAnim --bind-t
 On client, just attach to the newly created server socket.
 
 ```bash
-xpra attach tcp:<server_address>:10000
+$ xpra attach tcp:<server_address>:10000
 ```
