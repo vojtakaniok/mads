@@ -37,6 +37,18 @@ def get_node_ips(node, verbose: bool = False):
         print(json.dumps(addrs_verbose, indent=2))
     return addrs
 
+def get_ip_of_remote_server(echo_client: Union[ns.applications.UdpEchoClient, ns.Ptr]) -> ns.network.Ipv4Address:
+    # Ensure that client is application and not a pointer
+    try:
+        echo_client = echo_client.__deref__()
+    except AttributeError as e:
+        pass
+    f = ns.AddressValue()
+    echo_client.GetAttribute("RemoteAddress",f)
+    addr = f.Get()
+    ipv4_addr = ns.Ipv4Address.ConvertFrom(addr)
+    return ipv4_addr
+
 ##########################################################################
 # 02
 
