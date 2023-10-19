@@ -14,9 +14,48 @@ ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 
 ##########################################################################
 # 03
+def get_node_ips_all(node_container: Union[ns.NodeContainer, ns.Ptr], verbose=False) -> list:
+    """
+    Get IP addresses of all nodes in a node container.
 
+    Parameters
+    ----------
+    node_container : Union[ns.NodeContainer, ns.Ptr]
+        The node container or a pointer to it.
+    verbose : bool, optional
+        If True, print verbose output, by default False.
 
-def get_node_ips(node, verbose: bool = False):
+    Returns
+    -------
+    list
+        List of IP addresses of all nodes in the node container.
+    """
+    # Ensure that node is a Node and not a pointer
+    try:
+        node_container = node_container.__deref__()
+    except AttributeError as e:
+        pass
+    output_list = []
+    for node_idx in range(node_container.GetN()):
+        output_list.append(get_node_ips(node_container.Get(node_idx), verbose=verbose))
+    return output_list
+
+def get_node_ips(node: Union[ns.Node, ns.Ptr], verbose: bool = False) -> dict[int,list]:
+    """
+    Get IP addresses of a node.
+
+    Parameters
+    ----------
+    node : Union[ns.Node, ns.Ptr]
+        The node or a pointer to it.
+    verbose : bool, optional
+        If True, print verbose output, by default False.
+
+    Returns
+    -------
+    dict[int,list]
+        Dictionary of IP addresses of the node, keyed by interface index.
+    """
     # Ensure that node is a Node and not a pointer
     try:
         node = node.__deref__()
@@ -38,6 +77,19 @@ def get_node_ips(node, verbose: bool = False):
     return addrs
 
 def get_ip_of_remote_server(echo_client: Union[ns.applications.UdpEchoClient, ns.Ptr]) -> ns.network.Ipv4Address:
+    """
+    Get IP address of a remote server.
+
+    Parameters
+    ----------
+    echo_client : Union[ns.applications.UdpEchoClient, ns.Ptr]
+        The echo client or a pointer to it.
+
+    Returns
+    -------
+    ns.network.Ipv4Address
+        The IP address of the remote server.
+    """
     # Ensure that client is application and not a pointer
     try:
         echo_client = echo_client.__deref__()
