@@ -130,4 +130,6 @@ RUN apt clean && \
   
 USER student
 WORKDIR $INSTALL_DIR
-CMD ["/bin/bash"]
+
+COPY start.sh start.sh
+CMD ./start.sh
